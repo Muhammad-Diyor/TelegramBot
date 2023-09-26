@@ -120,4 +120,7 @@
   <data name="Greeting" xml:space="preserve">
     <value>Salom</value>
   </data>
+  <data name="Main-menu" xml:space="preserve">
+    <value>Salom, quyidagilardan birini tanlang:</value>
+  </data>
 </root>

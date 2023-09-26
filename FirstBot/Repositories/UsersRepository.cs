@@ -2,6 +2,7 @@
 using FirstBot.Entities;
 using FirstBot.Models;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 using Telegram.Bot.Types;
 
 namespace FirstBot.Repositories;
@@ -22,7 +23,7 @@ public class UsersRepository
         context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
         var botUser = user.Adapt<BotUser>();
-
+        botUser.JoinedAt = DateTime.Now;
         try
         {
             await context.Users.AddAsync(botUser);
@@ -49,6 +50,22 @@ public class UsersRepository
         catch (Exception e)
         {
             return new Result<IEnumerable<BotUser>>() { Message = e.Message };
+        }
+    }
+
+    public Result<bool> UserExists(long Id)
+    {
+        var scope = scopeFactory.CreateScope();
+        context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        try
+        {
+            var exists = context.Users.Any(u => u.Id == Id);
+            return new Result<bool>() { Success = true, Data = true};
+        }
+        catch (Exception e)
+        {
+            return new Result<bool>(){Message = e.Message};
         }
     }
 }

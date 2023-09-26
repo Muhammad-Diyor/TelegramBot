@@ -22,35 +22,26 @@ public partial class BotUpdateHandlerService : IUpdateHandler
     }
 
     public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
-        {   
-            var culture = new CultureInfo("en-En");
+    {
+        InjectServices();
 
-            CultureInfo.CurrentCulture = culture;
-            CultureInfo.CurrentUICulture = culture;
+        var handler = update.Type switch
+        {
+            UpdateType.Message => HandleMessageAsync(botClient, update.Message, cancellationToken),
+            UpdateType.InlineQuery => HandleCallbackQueryAsync(botClient, update.CallbackQuery, cancellationToken),
+            _ => HandleUnknownUpdateAsync(botClient, update, cancellationToken)
+        };
 
-            var scope = scopeFactory.CreateScope();
-            
-            localizer = scope.ServiceProvider.GetRequiredService<IStringLocalizer<BotLocalizer>>();
-            usersService = scope.ServiceProvider.GetRequiredService<UserService>();
-
-            var handler = update.Type switch
-            {
-                UpdateType.Message => HandleMessageAsync(botClient, update.Message, cancellationToken),
-                _ => HandleUnknownUpdateAsync(botClient, update, cancellationToken)
-            };
-
-            Console.WriteLine(nameof(handler) + " aaaaaaa");
-
-            try
-            {
-                await handler;
-            }
-            catch (Exception e)
-            {
-                botClient.SendTextMessageAsync(update.Message.From.Id, e.Message + "\n" + e.InnerException);
-                await HandlePollingErrorAsync(botClient, e, cancellationToken);
-            }
+        try
+        {
+            await handler;
         }
+        catch (Exception e)
+        {
+            botClient.SendTextMessageAsync(update.Message.From.Id, e.Message + "\n" + e.InnerException);
+            await HandlePollingErrorAsync(botClient, e, cancellationToken);
+        }
+    }
 
     public Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
     {
@@ -59,4 +50,11 @@ public partial class BotUpdateHandlerService : IUpdateHandler
         return Task.CompletedTask;
     }
 
+    private void InjectServices()
+    {
+        var scope = scopeFactory.CreateScope();
+
+        localizer = scope.ServiceProvider.GetRequiredService<IStringLocalizer<BotLocalizer>>();
+        usersService = scope.ServiceProvider.GetRequiredService<UserService>();
+    }
 }

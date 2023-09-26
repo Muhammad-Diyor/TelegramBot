@@ -5,8 +5,10 @@ using FirstBot.Services;
 using FirstBot.Services.Handlers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Serilog;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
+using TelegramSink;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,10 @@ builder.Services.AddHostedService<BotBackgroundService>();
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<UsersRepository>();
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.TeleSink("5843621363:AAFiycHoNHeFGUzGmKrczcOWJCd1b82hWJo", "-1001651963754", minimumLevel: Serilog.Events.LogEventLevel.Information)
+    .CreateLogger();
 
 builder.Services.AddLocalization();
 

@@ -7,4 +7,5 @@ public class BotUser
     public string? LastName { get; set; }
     public string? Username { get; set; }
     public string LanguageCode { get; set; }
+    public DateTime? JoinedAt { get; set; }
 }

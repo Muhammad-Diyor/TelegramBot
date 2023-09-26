@@ -17,17 +17,25 @@ public class UserService
 
     public Result<IEnumerable<BotUser>> GetUsers()
     {
-        var scope = _scopeFactory.CreateScope();
-        usersRepository = scope.ServiceProvider.GetRequiredService<UsersRepository>();
-
+        InjectServices();
         return usersRepository.GetUsers();
     }
 
     public async Task<Result<string>> AddUser(User user)
     {
+        InjectServices();
+        return await usersRepository.AddUserAsync(user);
+    }
+
+    public Result<bool> UserExists(long Id)
+    {
+        InjectServices();
+        return usersRepository.UserExists(Id);
+    }
+
+    private void InjectServices()
+    {
         var scope = _scopeFactory.CreateScope();
         usersRepository = scope.ServiceProvider.GetRequiredService<UsersRepository>();
-
-        return await usersRepository.AddUserAsync(user);
     }
 }
