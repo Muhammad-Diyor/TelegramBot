@@ -123,4 +123,7 @@
   <data name="Greeting" xml:space="preserve">
     <value>Hello world</value>
   </data>
+  <data name="start" xml:space="preserve">
+    <value>Hello, choose needed option.</value>
+  </data>
 </root>

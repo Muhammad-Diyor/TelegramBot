@@ -12,15 +12,20 @@ public partial class BotUpdateHandlerService
 
         var from = query.From;
 
-        Log.Information($"Got a callback query from {query.From.FirstName} \n Query is {query.Message}");
         var handler = query.Data switch
         {
-            "Hello" => GetBooksQuery(client, query, cancellationToken),
+            "Add-book" => AddBookQuery(client, query, cancellationToken),
 
-            _ => GetBooksQuery(client, query, cancellationToken)
+            _ => AddBookQuery(client, query, cancellationToken)
         };
 
         await handler;
+    }
+
+    private async Task AddBookQuery(ITelegramBotClient client, CallbackQuery query,
+        CancellationToken cancellationToken)
+    {
+        client.SendTextMessageAsync(query.Message.Chat.Id, "Nima gap");
     }
 
     private async Task GetBooksQuery(ITelegramBotClient client, CallbackQuery query,

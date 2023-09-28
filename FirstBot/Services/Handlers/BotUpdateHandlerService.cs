@@ -1,6 +1,9 @@
 ﻿using System.Globalization;
+using FirstBot.Helpers;
 using FirstBot.Resources;
+using FirstBot.Services.NonHandlerServices;
 using Microsoft.Extensions.Localization;
+using Serilog;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -28,17 +31,20 @@ public partial class BotUpdateHandlerService : IUpdateHandler
         var handler = update.Type switch
         {
             UpdateType.Message => HandleMessageAsync(botClient, update.Message, cancellationToken),
-            UpdateType.InlineQuery => HandleCallbackQueryAsync(botClient, update.CallbackQuery, cancellationToken),
+            UpdateType.CallbackQuery => HandleCallbackQueryAsync(botClient, update.CallbackQuery!, cancellationToken),
             _ => HandleUnknownUpdateAsync(botClient, update, cancellationToken)
         };
+
+        TLogger.LogError("Just setting up logger", "Ignore me");
 
         try
         {
             await handler;
+            
         }
         catch (Exception e)
         {
-            botClient.SendTextMessageAsync(update.Message.From.Id, e.Message + "\n" + e.InnerException);
+            TLogger.LogError(e.Message, e.InnerException.Message );
             await HandlePollingErrorAsync(botClient, e, cancellationToken);
         }
     }

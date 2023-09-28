@@ -8,4 +8,5 @@ public class BotUser
     public string? Username { get; set; }
     public string LanguageCode { get; set; }
     public DateTime? JoinedAt { get; set; }
+    public UserStep UserStep { get; set; }
 }

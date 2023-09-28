@@ -10,10 +10,9 @@ public partial class BotUpdateHandlerService
     private async Task DisplayMainMenuAsync(ITelegramBotClient client, Message message, CancellationToken token)
     {
         await client.SendTextMessageAsync(
-            message.Chat.Id, "Tanlang shep",
+            message.Chat.Id, localizer["start"],
             replyMarkup: MarkupHelpers.GetInlineKeyboardMatrix(
                 MenuDictionary.MainMenu),
             cancellationToken: token);
-
     }
 }

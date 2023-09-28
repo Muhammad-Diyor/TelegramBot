@@ -123,4 +123,7 @@
   <data name="Main-menu" xml:space="preserve">
     <value>Salom, quyidagilardan birini tanlang:</value>
   </data>
+  <data name="start" xml:space="preserve">
+    <value>Salom. Menyudan o'zingizga kerakli bo'limni tanlang</value>
+  </data>
 </root>

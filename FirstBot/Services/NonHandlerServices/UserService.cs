@@ -3,7 +3,7 @@ using FirstBot.Models;
 using FirstBot.Repositories;
 using Telegram.Bot.Types;
 
-namespace FirstBot.Services;
+namespace FirstBot.Services.NonHandlerServices;
 
 public class UserService
 {

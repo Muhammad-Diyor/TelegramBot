@@ -3,6 +3,7 @@ using FirstBot.Repositories;
 using FirstBot.Resources;
 using FirstBot.Services;
 using FirstBot.Services.Handlers;
+using FirstBot.Services.NonHandlerServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Serilog;

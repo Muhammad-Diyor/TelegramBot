@@ -68,4 +68,21 @@ public class UsersRepository
             return new Result<bool>(){Message = e.Message};
         }
     }
+
+    public async Task<Result<bool>> SetUserStepAsync(long userId, UserStep step)
+    {
+        var scope = scopeFactory.CreateScope();
+        context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        try
+        {
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            return new Result<bool>() { Success = true, Data = true };
+        }
+        catch (Exception e)
+        {
+            return new Result<bool>() { Message = e.Message };
+        }
+    }
 }
